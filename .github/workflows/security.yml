@@ -21,5 +21,4 @@ jobs:
           projectKey: "prueba-horusec-y-canary"
           organization: "josiastomasnanez"
           token: ${{ secrets.SONAR_TOKEN }}
-         
 
