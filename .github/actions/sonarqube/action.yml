@@ -11,12 +11,16 @@ inputs:
   token:
     description: "SonarQube token"
     required: true
+  organization:
+    description: "SonarCloud organization key"
+    required: true
 
 runs:
   using: "docker"
   image: "docker://sonarsource/sonar-scanner-cli:latest"
   args:
     - "-Dsonar.projectKey=${{ inputs.projectKey }}"
+    - "-Dsonar.organization=${{ inputs.organization }}"
     - "-Dsonar.sources=."
     - "-Dsonar.host.url=${{ inputs.host }}"
     - "-Dsonar.login=${{ inputs.token }}"
