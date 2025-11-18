@@ -9,10 +9,19 @@ runs:
         curl -fsSL https://raw.githubusercontent.com/ZupIT/horusec/master/deployments/scripts/install.sh | bash -s latest
       shell: bash
 
-    - name: Run Horusec
+    - name: Run Horusec and Show Vulnerabilities
       run: |
+        # Ejecuta Horusec y guarda el reporte JSON
         horusec start -p . \
           --config-file-path=horusec-config.json \
-          --return-error=true
+          -o json \
+          --show-vulnerabilities-types="Vulnerability" \
+          --return-error=false > horusec-report.json
+
+        # Mostrar vulnerabilidades en consola de forma legible
+        echo "Vulnerabilities found:"
+        jq -r '.analysisVulnerabilities[] | 
+          .vulnerabilities | 
+          "\(.severity) - \(.file):\(.line) - \(.details)"' horusec-report.json
       shell: bash
 
