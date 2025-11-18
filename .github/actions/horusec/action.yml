@@ -14,13 +14,13 @@ runs:
         echo "Running Horusec scan..."
 
         # EJECUTAR Y GUARDAR JSON MANUALMENTE DESDE STDOUT
-       horusec start -p . \
-            --disable-docker=true \
-            --output-format json \
-            --config-file-path=horusec-config.json \
-            --json-output-file horusec-report.json \
-            --show-vulnerabilities-types="Vulnerability" \
-            --return-error=false
+        horusec start -p . \
+          --disable-docker=true \
+          --output-format json \
+          --config-file-path=horusec-config.json \
+          --json-output-file horusec-report.json \
+          --show-vulnerabilities-types="Vulnerability" \
+          --return-error=false
 
         echo ""
         echo "----------------------------"
