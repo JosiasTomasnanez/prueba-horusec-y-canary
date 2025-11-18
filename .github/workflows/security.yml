@@ -5,7 +5,7 @@ on:
     branches: [ main ]
 
 jobs:
-  horusec_scan:
+  security_pipeline:
     runs-on: ubuntu-latest
 
     steps:
@@ -13,5 +13,12 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Horusec Scan
-        uses: ./.github/actions/horusec   # <-- llama a un ACTION separado
+        uses: ./.github/actions/horusec
+
+      - name: SonarQube Scan
+        uses: ./.github/actions/sonarqube
+        with:
+          projectKey: "mi-proyecto"
+          host: "https://sonarcloud.io"
+          token: ${{ secrets.SONAR_TOKEN }}
 
