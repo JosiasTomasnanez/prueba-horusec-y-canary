@@ -16,7 +16,7 @@ jobs:
         uses: ./.github/actions/horusec
 
       - name: SonarQube Scan
-        uses: ./.github/actions/sonarqube
+        uses: SonarSource/sonarcloud-github-action@master
         with:
           projectKey: "prueba-horusec-y-canary"
           organization: "josiastomasnanez"
