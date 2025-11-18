@@ -15,8 +15,9 @@ runs:
         horusec start -p . \
           --config-file-path=horusec-config.json \
           -o json \
+          -O horusec-report.json \
           --return-error=false \
-          --show-vulnerabilities-types="Vulnerability" > horusec-report.json || true
+          --show-vulnerabilities-types="Vulnerability"
 
         echo ""
         echo "----------------------------"
@@ -28,7 +29,6 @@ runs:
         echo "----------------------------"
         echo "Parsed vulnerabilities:"
         echo "----------------------------"
-
         jq -r '
           .analysisVulnerabilities[]?
           | (.vulnerability // .vulnerabilities)
