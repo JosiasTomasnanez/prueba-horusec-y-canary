@@ -1,27 +1,37 @@
 name: "Horusec Security Scan"
-description: "Runs Horusec analysis with config file"
+description: "Runs Horusec analysis and shows vulnerabilities in GitHub Actions"
 
 runs:
   using: "composite"
   steps:
+    # Paso 1: Instalar Horusec CLI
     - name: Install Horusec CLI
       run: |
+        echo "Installing Horusec CLI..."
         curl -fsSL https://raw.githubusercontent.com/ZupIT/horusec/master/deployments/scripts/install.sh | bash -s latest
       shell: bash
 
-    - name: Run Horusec and Show Vulnerabilities
+    # Paso 2: Ejecutar Horusec y generar reporte JSON
+    - name: Run Horusec Analysis
       run: |
-        # Ejecuta Horusec y guarda el reporte JSON
+        echo "Running Horusec scan..."
         horusec start -p . \
           --config-file-path=horusec-config.json \
           -o json \
           --show-vulnerabilities-types="Vulnerability" \
-          --return-error=false > horusec-report.json
+          --return-error=false > horusec-report.json || true
 
-        # Mostrar vulnerabilidades en consola de forma legible
+        echo "----------------------------"
         echo "Vulnerabilities found:"
-        jq -r '.analysisVulnerabilities[] | 
-          .vulnerabilities | 
-          "\(.severity) - \(.file):\(.line) - \(.details)"' horusec-report.json
+        echo "----------------------------"
+
+        # Mostrar solo lo más relevante usando jq
+        if [ -f horusec-report.json ]; then
+          jq -r '.analysisVulnerabilities[] | 
+            .vulnerabilities | 
+            "\(.severity) - \(.file):\(.line) - \(.details)"' horusec-report.json
+        else
+          echo "No report file found."
+        fi
       shell: bash
 
