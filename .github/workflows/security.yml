@@ -15,13 +15,13 @@ jobs:
       - name: Horusec Scan
         uses: ./.github/actions/horusec
 
-      - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v5
+      - name: SonarQube Scan (local action)
+        uses: ./.github/actions/sonarqube
         with:
           projectBaseDir: .
-          args: >
-            -Dsonar.projectKey=prueba-horusec-y-canary
-            -Dsonar.organization=josiastomasnanez
-            -Dsonar.host.url=https://sonarcloud.io
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+          sonar_projectKey: prueba-horusec-y-canary
+          sonar_organization: josiastomasnanez
+          sonar_host_url: https://sonarcloud.io
+          sonar_token: ${{ secrets.SONAR_TOKEN }}
+
 
