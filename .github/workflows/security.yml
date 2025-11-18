@@ -18,7 +18,8 @@ jobs:
       - name: SonarQube Scan
         uses: ./.github/actions/sonarqube
         with:
-          projectKey: "mi-proyecto"
+          projectKey: "josiastomasnanez"
+          organization: "josiastomasnanez"
           host: "https://sonarcloud.io"
           token: ${{ secrets.SONAR_TOKEN }}
 
