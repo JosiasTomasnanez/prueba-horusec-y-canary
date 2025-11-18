@@ -1,1 +1,13 @@
-"no se si esta funcionando"
+{
+  "version": "v2.8.0",
+  "id": "f619fe4f-5fba-4472-85dd-c96eddc9c7c9",
+  "repositoryID": "00000000-0000-0000-0000-000000000000",
+  "repositoryName": "",
+  "workspaceID": "00000000-0000-0000-0000-000000000000",
+  "workspaceName": "",
+  "status": "success",
+  "errors": "",
+  "createdAt": "2025-11-17T23:31:55.477710733-03:00",
+  "finishedAt": "2025-11-17T23:31:55.498799423-03:00",
+  "analysisVulnerabilities": null
+}
