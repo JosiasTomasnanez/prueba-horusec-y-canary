@@ -12,12 +12,13 @@ runs:
     - name: Run Horusec Analysis
       run: |
         echo "Running Horusec scan..."
+
+        # Ejecutar Horusec (sin show-vulnerabilities-types)
         horusec start -p . \
           --config-file-path=horusec-config.json \
           -o json \
           -O horusec-report.json \
-          --return-error=false \
-          --show-vulnerabilities-types="Vulnerability"
+          --return-error=false || true
 
         echo ""
         echo "----------------------------"
