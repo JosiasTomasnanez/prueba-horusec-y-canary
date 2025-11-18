@@ -22,4 +22,5 @@ jobs:
           organization: "josiastomasnanez"
           host: "https://sonarcloud.io"
           token: ${{ secrets.SONAR_TOKEN }}
+          branchName: "main"
 
