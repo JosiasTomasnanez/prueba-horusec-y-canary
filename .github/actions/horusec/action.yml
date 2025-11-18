@@ -1,38 +1,76 @@
-name: "Horusec Security Scan"
-description: "Runs Horusec analysis with config file"
+name: "Horusec Debug Security Scan"
+description: "Runs Horusec with debug mode and forces JSON extraction"
 
 runs:
   using: "composite"
   steps:
     - name: Install Horusec CLI
       run: |
+        echo "Installing Horusec CLI..."
         curl -fsSL https://raw.githubusercontent.com/ZupIT/horusec/master/deployments/scripts/install.sh | bash -s latest
       shell: bash
 
-    - name: Run Horusec Analysis
+    - name: Check Horusec Version
       run: |
-        echo "Running Horusec scan..."
+        echo "Horusec version:"
+        horusec version
+      shell: bash
 
-        # EJECUTAR Y GUARDAR JSON MANUALMENTE DESDE STDOUT
+    - name: Debug Run - Raw Output
+      run: |
+        echo "Running Horusec in DEBUG MODE..."
+        echo "-----------------------------------"
+
+        # Ejecutar Horusec mostrando TODO el output posible
+        # SIN redirecciones para ver EXACTAMENTE qué imprime
         horusec start -p . \
-          --config-file-path=horusec-config.json \
+          --return-error=false \
+          --verbose \
+          --disable-docker=true \
           -o json \
-          --return-error=false > horusec-report.json 2>/dev/null || true
+          --config-file-path=horusec-config.json || true
+      shell: bash
 
+    - name: Second Run - Capture JSON
+      run: |
         echo ""
-        echo "----------------------------"
-        echo "FULL REPORT (cat horusec-report.json)"
-        echo "----------------------------"
-        cat horusec-report.json || echo "No report found"
-        echo ""
+        echo "-----------------------------------"
+        echo "Forcing JSON capture"
+        echo "-----------------------------------"
 
-        echo "----------------------------"
-        echo "Parsed vulnerabilities:"
-        echo "----------------------------"
+        # Capturamos TODO en un archivo para inspeccionarlo
+        horusec start -p . \
+          --return-error=false \
+          --verbose \
+          --disable-docker=true \
+          -o json \
+          --config-file-path=horusec-config.json \
+          > horusec-report.json 2>&1 || true
+
+        echo "Finished capturing output"
+      shell: bash
+
+    - name: Show raw JSON file
+      run: |
+        echo ""
+        echo "-----------------------------------"
+        echo "Raw horusec-report.json content"
+        echo "-----------------------------------"
+        cat horusec-report.json || echo "File not found"
+      shell: bash
+
+    - name: Parse JSON vulnerabilities
+      run: |
+        echo ""
+        echo "-----------------------------------"
+        echo "Parsed Vulnerabilities"
+        echo "-----------------------------------"
+
+        # Intentamos parsear JSON aunque esté sucio
         jq -r '
-          .analysisVulnerabilities[]?
-          | (.vulnerability // .vulnerabilities)
-          | "\(.severity) - \(.file):\(.line) - \(.details)"
-        ' horusec-report.json || echo "No vulnerabilities parsed."
+          try .analysisVulnerabilities[]?.vulnerability as $v
+          | "\($v.severity) | \($v.file):\($v.line) | \($v.details)"
+        ' horusec-report.json \
+        || echo "Could not parse vulnerabilities (file may not be JSON)"
       shell: bash
 
