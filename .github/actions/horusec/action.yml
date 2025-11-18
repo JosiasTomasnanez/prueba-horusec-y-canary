@@ -1,0 +1,15 @@
+name: "Horusec Security Scan"
+description: "Runs Horusec analysis with config file"
+runs:
+  using: "composite"
+  steps:
+    - name: Install Horusec CLI
+      run: |
+        curl -fsSL https://horusec.io/bin/install.sh | bash
+
+    - name: Run Horusec
+      run: |
+        horusec start -p . \
+          --config-file-path=horusec-config.json \
+          --return-error=true
+

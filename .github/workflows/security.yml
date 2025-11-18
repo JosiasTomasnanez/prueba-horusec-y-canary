@@ -1,0 +1,17 @@
+name: SecurityPipeline
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  horusec_scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Horusec Scan
+        uses: ./.github/actions/horusec   # <-- llama a un ACTION separado
+
