@@ -13,12 +13,11 @@ runs:
       run: |
         echo "Running Horusec scan..."
 
-        # Ejecutar Horusec (sin show-vulnerabilities-types)
+        # EJECUTAR Y GUARDAR JSON MANUALMENTE DESDE STDOUT
         horusec start -p . \
           --config-file-path=horusec-config.json \
           -o json \
-          -O horusec-report.json \
-          --return-error=false || true
+          --return-error=false > horusec-report.json 2>/dev/null || true
 
         echo ""
         echo "----------------------------"
